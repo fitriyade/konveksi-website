@@ -16,6 +16,7 @@ interface Product {
 
 export default function CartClient({ products }: { products: Product[] }) {
   const { quantities, updateQuantity, setQuantities } = useCart();
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const [customerInfo, setCustomerInfo] = useState({
     name: '',
     phone: '',
@@ -24,6 +25,14 @@ export default function CartClient({ products }: { products: Product[] }) {
   });
   const [paymentMethod, setPaymentMethod] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
+
+  // Get unique categories from products
+  const categories = ['all', ...new Set(products.map(p => p.category))];
+  
+  // Filter products based on selected category
+  const filteredProducts = selectedCategory === 'all' 
+    ? products 
+    : products.filter(p => p.category === selectedCategory);
 
   // Calculate totals
   const selectedProducts = products.filter(p => quantities[p.id] > 0);
@@ -75,8 +84,28 @@ export default function CartClient({ products }: { products: Product[] }) {
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Daftar Produk</h2>
+            
+            {/* Category Filter */}
+            <div className="mb-8 overflow-x-auto">
+              <div className="flex gap-2 sm:gap-3 pb-2 min-w-max">
+                {categories.map((category) => (
+                  <button
+                    key={category}
+                    onClick={() => setSelectedCategory(category)}
+                    className={`px-4 py-2 rounded-full text-sm font-semibold transition-all whitespace-nowrap ${
+                      selectedCategory === category
+                        ? 'bg-amber-500 text-white shadow-md'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    {category === 'all' ? 'Semua' : category}
+                  </button>
+                ))}
+              </div>
+            </div>
+            
             <div className="space-y-6">
-              {products.map((product) => (
+              {filteredProducts.map((product) => (
                 <div key={product.id} className="flex flex-col sm:flex-row gap-6 p-4 rounded-2xl bg-gray-50 border border-transparent hover:border-amber-200 transition-colors">
                   <div className="relative w-full sm:w-32 h-32 rounded-xl overflow-hidden shrink-0 bg-gray-200">
                     <Image 
@@ -120,6 +149,12 @@ export default function CartClient({ products }: { products: Product[] }) {
                   </div>
                 </div>
               ))}
+              
+              {filteredProducts.length === 0 && (
+                <div className="text-center py-12 text-gray-400">
+                  Tidak ada produk dalam kategori ini
+                </div>
+              )}
             </div>
           </div>
         </div>

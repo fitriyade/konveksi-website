@@ -4,7 +4,7 @@ export default async function CartPage() {
   let products = [];
   try {
     const res = await fetch("https://69c932a668edf52c954e51b1.mockapi.io/api/v1/products", {
-      next: { revalidate: 3600 }
+      cache: 'no-store' 
     });
     if (res.ok) {
       products = await res.json();
