@@ -25,11 +25,11 @@ Project ini menggunakan API dari MockAPI untuk mengelola data produk.
 https://mockapi.io/api/v1/products
 
 - Endpoint yang digunakan:
-GET /products        Menampilkan semua produk
-GET /products/:id    Menampilkan detail produk
-POST /products       Menambahkan produk baru
-PUT /products/:id    Mengupdate data produk
-DELETE /products/:id Menghapus produk
+   - GET /products        Menampilkan semua produk
+   - GET /products/:id    Menampilkan detail produk
+   - POST /products       Menambahkan produk baru
+   - PUT /products/:id    Mengupdate data produk
+   - DELETE /products/:id Menghapus produk
 
 API ini digunakan pada dashboard admin untuk menjalankan fitur CRUD produk.
 
