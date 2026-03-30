@@ -14,7 +14,7 @@ Dashboard admin sudah terintegrasi dengan API yang dibuat menggunakan MockApi da
 
 ## Teknologi yang Digunakan
 - React
-- JavaScript
+- TypeScript
 - Tailwind CSS
 - React Router
 - MockAPI
