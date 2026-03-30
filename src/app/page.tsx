@@ -1,215 +1,346 @@
 import Image from "next/image";
+import Link from "next/link";
+import ProductPortfolio from "./_components/product-portfolio";
 
-export default function Home() {
+export default async function Home() {
+  let products = [];
+  try {
+    const res = await fetch("https://69c932a668edf52c954e51b1.mockapi.io/api/v1/products", {
+      next: { revalidate: 3600 }
+    });
+    if (res.ok) {
+      products = await res.json();
+    }
+  } catch (error) {
+    console.error("Error fetching products:", error);
+  }
+
+  const topProducts = products.slice(0, 6);
+
   return (
-    <div className="min-h-screen bg-stone-50 font-sans text-stone-900 selection:bg-rose-200 scroll-smooth">
-      {/* Navigation */}
-      <nav className="fixed top-0 w-full bg-white/80 backdrop-blur-md z-50 border-b border-stone-200 transition-all duration-300">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="text-2xl font-serif font-bold text-rose-900 tracking-tight">
-            Femme<span className="text-stone-400">Sew</span>
-          </div>
-          <div className="hidden md:flex gap-8 text-sm font-medium text-stone-600">
-            <a href="#home" className="hover:text-rose-600 transition-colors">Beranda</a>
-            <a href="#about" className="hover:text-rose-600 transition-colors">Tentang Kami</a>
-            <a href="#services" className="hover:text-rose-600 transition-colors">Layanan & Produk</a>
-            <a href="#contact" className="hover:text-rose-600 transition-colors">Kontak</a>
-          </div>
-          <a href="#contact" className="hidden md:inline-flex px-6 py-2.5 bg-rose-900 text-white text-sm font-medium rounded-full hover:bg-rose-800 transition-colors">
-            Pesan Sekarang
-          </a>
-        </div>
-      </nav>
-
-      <main className="pt-20">
-        {/* HOMEPAGE (HERO) */}
-        <section id="home" className="pt-20 pb-20 md:pt-36 md:pb-32 px-6 max-w-7xl mx-auto flex flex-col items-center text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-rose-100 text-rose-800 text-sm font-medium mb-8">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
-            </span>
-            Kapasitas Produksi Tersedia
-          </div>
-          <h1 className="text-5xl md:text-7xl font-serif text-stone-900 mb-8 leading-tight max-w-4xl">
-            Wujudkan Desain Fashion Wanita <span className="text-rose-800 italic">Impian Anda</span>
-          </h1>
-          <p className="text-lg md:text-xl text-stone-600 max-w-2xl mb-12">
-            Mitra produksi konveksi terpercaya khusus pakaian wanita. Kami melayani pembuatan gaun, blouse, rok, hingga hijab dengan detail dan kualitas butik premium.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <a href="#contact" className="px-8 py-4 bg-rose-900 text-white rounded-full font-medium text-lg hover:bg-rose-800 transition-all hover:shadow-lg hover:-translate-y-1">
-              Konsultasi Gratis
-            </a>
-            <a href="#services" className="px-8 py-4 bg-white text-stone-900 border border-stone-200 rounded-full font-medium text-lg hover:bg-stone-50 transition-all">
-              Lihat Layanan
-            </a>
-          </div>
-        </section>
-
-        {/* ABOUT */}
-        <section id="about" className="py-24 bg-white px-6 scroll-mt-20">
-          <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
-            <div className="relative aspect-square md:aspect-[4/5] rounded-3xl overflow-hidden bg-stone-100">
-              <div className="absolute inset-0 bg-gradient-to-tr from-rose-200 to-rose-50 flex items-center justify-center p-12 text-center text-stone-400 shadow-inner">
-                 {/* Placeholder for real image */}
-                 <span className="font-medium text-lg text-rose-800/40">Visualisasi Area Penjahit & Pola</span>
-              </div>
-            </div>
-            <div>
-              <h2 className="text-sm font-bold tracking-widest text-rose-600 uppercase mb-4">Tentang Kami</h2>
-              <h3 className="text-4xl font-serif text-stone-900 mb-6 leading-tight">Berdedikasi untuk Kualitas Sejak Ide Pertama</h3>
-              <p className="text-stone-600 mb-6 text-lg leading-relaxed">
-                FemmeSew hadir sebagai solusi bagi para brand owner, desainer, maupun pengusaha fashion yang fokus pada segmen pakaian wanita. Kami mengerti bahwa fashion wanita membutuhkan ketelitian ekstra, mulai dari pemilihan bahan, potongan (cutting) yang pas di badan, hingga jahitan yang rapi.
-              </p>
-              <ul className="space-y-4 text-stone-700">
-                <li className="flex items-center gap-3">
-                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-rose-100 flex items-center justify-center text-rose-600">
-                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
-                  </div>
-                  <span className="font-medium text-stone-800">Kualitas Jahitan Butik (QC Ketat)</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-rose-100 flex items-center justify-center text-rose-600">
-                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
-                  </div>
-                  <span className="font-medium text-stone-800">Minimal Order Bersahabat</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-rose-100 flex items-center justify-center text-rose-600">
-                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
-                  </div>
-                  <span className="font-medium text-stone-800">Ketepatan Waktu Produksi</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        {/* SERVICE */}
-        <section id="services" className="py-24 px-6 bg-stone-50 scroll-mt-20">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-sm font-bold tracking-widest text-rose-600 uppercase mb-4">Layanan & Produk</h2>
-              <h3 className="text-4xl font-serif text-stone-900 mb-6">Apa yang Kami Produksi?</h3>
-              <p className="text-stone-600 max-w-2xl mx-auto text-lg">Kami menerima jasa menjahit (CMT) maupun full order (FOB) untuk berbagai jenis pakaian wanita dengan spesifikasi custom sesuai brand Anda.</p>
-            </div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {/* Product 1 */}
-              <div className="bg-white rounded-3xl p-8 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border border-stone-100">
-                <div className="w-14 h-14 bg-rose-50 rounded-2xl flex items-center justify-center mb-6 text-rose-600">
-                  <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
-                </div>
-                <h4 className="text-xl font-bold text-stone-900 mb-3">Dress & Gaun</h4>
-                <p className="text-stone-600 text-sm leading-relaxed">Produksi gaun pesta, dress kasual, midi, hingga maxi dress dengan potongan elegan dan jatuh yang sempurna di badan.</p>
-              </div>
-
-              {/* Product 2 */}
-              <div className="bg-white rounded-3xl p-8 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border border-stone-100">
-                <div className="w-14 h-14 bg-rose-50 rounded-2xl flex items-center justify-center mb-6 text-rose-600">
-                  <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5" /></svg>
-                </div>
-                <h4 className="text-xl font-bold text-stone-900 mb-3">Atasan & Blouse</h4>
-                <p className="text-stone-600 text-sm leading-relaxed">Dari kemeja kerja formal hingga tunik dan blouse kekinian dengan detail kerah, ruffles, atau lengan puff.</p>
-              </div>
-
-              {/* Product 3 */}
-              <div className="bg-white rounded-3xl p-8 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border border-stone-100">
-                <div className="w-14 h-14 bg-rose-50 rounded-2xl flex items-center justify-center mb-6 text-rose-600">
-                  <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
-                </div>
-                <h4 className="text-xl font-bold text-stone-900 mb-3">Bawahan</h4>
-                <p className="text-stone-600 text-sm leading-relaxed">Celana kulot, chino, rok plisket, rok span, hingga celana pendek dari bahan katun, linen, maupun satin lembut.</p>
-              </div>
-
-              {/* Product 4 */}
-              <div className="bg-white rounded-3xl p-8 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border border-stone-100">
-                <div className="w-14 h-14 bg-rose-50 rounded-2xl flex items-center justify-center mb-6 text-rose-600">
-                  <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" /></svg>
-                </div>
-                <h4 className="text-xl font-bold text-stone-900 mb-3">Outerwear</h4>
-                <p className="text-stone-600 text-sm leading-relaxed">Blazer kerja eksklusif, cardigan, bolero, dan jaket wanita dengan pola (pattern) dan lining kerah rapi sempurna.</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* CONTACT */}
-        <section id="contact" className="py-24 px-6 bg-zinc-900 text-white scroll-mt-20">
-          <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16">
-            <div>
-              <h2 className="text-sm font-bold tracking-widest text-rose-400 uppercase mb-4">Hubungi Kami</h2>
-              <h3 className="text-4xl md:text-5xl font-serif mb-6 leading-tight">Mulai Produksi Koleksi Anda Berikutnya</h3>
-              <p className="text-zinc-400 mb-10 text-lg leading-relaxed max-w-lg">
-                Punya desain referensi atau sekadar ide? Tim kami siap membantu Anda dari konsultasi bahan, pembuatan sampel, hingga menghitung estimasi biaya produksi massal.
-              </p>
-              
+    <>
+      <main className="bg-white min-h-screen">
+        {/* HERO SECTION - Clean & Minimal */}
+        <section id="home" className="relative min-h-screen flex items-center">
+          <div className="max-w-7xl mx-auto px-6 py-20">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              {/* Left Content */}
               <div className="space-y-8">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center shrink-0 text-rose-400">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
-                  </div>
-                  <div>
-                    <h5 className="font-semibold text-lg">WhatsApp / Telepon</h5>
-                    <p className="text-zinc-400 mt-1">+62 812 3456 7890</p>
-                  </div>
+                <div className="inline-flex items-center gap-2 bg-amber-50 px-4 py-2 rounded-full">
+                  <span className="w-2 h-2 bg-amber-500 rounded-full"></span>
+                  <span className="text-sm font-medium text-amber-700">Premium Konveksi</span>
                 </div>
                 
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center shrink-0 text-rose-400">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-                  </div>
-                  <div>
-                    <h5 className="font-semibold text-lg">Email</h5>
-                    <p className="text-zinc-400 mt-1">hello@femmesew.com</p>
-                  </div>
+                <h1 className="text-5xl md:text-7xl font-bold text-gray-900 leading-tight">
+                  Quality Meets
+                  <span className="text-amber-500"> Elegance</span>
+                </h1>
+                
+                <p className="text-xl text-gray-600 leading-relaxed max-w-lg">
+                  Mewujudkan desain pakaian wanita impian Anda dengan kualitas butik 
+                  dan pengerjaan yang presisi.
+                </p>
+                
+                <div className="flex gap-4">
+                  <Link href="#contact" className="px-8 py-4 bg-amber-500 text-white rounded-full font-semibold hover:bg-amber-600 transition-all hover:shadow-lg hover:-translate-y-0.5 inline-block text-center text-sm md:text-base">
+                    Mulai Konsultasi
+                  </Link>
+                  <Link href="#portfolio" className="px-8 py-4 border-2 border-gray-300 text-gray-700 rounded-full font-semibold hover:border-amber-500 hover:text-amber-500 transition-all inline-block text-center text-sm md:text-base">
+                    Lihat Portfolio
+                  </Link>
                 </div>
                 
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center shrink-0 text-rose-400">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                {/* Stats */}
+                <div className="flex gap-8 pt-8">
+                  <div>
+                    <div className="text-3xl font-bold text-gray-900">500+</div>
+                    <div className="text-sm text-gray-500">Proyek Selesai</div>
                   </div>
                   <div>
-                    <h5 className="font-semibold text-lg">Workshop & Kantor</h5>
-                    <p className="text-zinc-400 mt-1 leading-relaxed">Jl. Pakaian Modis No. 8, <br/>Kebayoran Baru, Jakarta Selatan 12120</p>
+                    <div className="text-3xl font-bold text-gray-900">100%</div>
+                    <div className="text-sm text-gray-500">Kepuasan Klien</div>
+                  </div>
+                  <div>
+                    <div className="text-3xl font-bold text-gray-900">15+</div>
+                    <div className="text-sm text-gray-500">Tahun Pengalaman</div>
                   </div>
                 </div>
               </div>
+              
+              {/* Right Image Placeholder */}
+              <div className="relative lg:h-[600px]">
+                <div className="bg-gradient-to-br from-amber-100 to-amber-200 rounded-3xl h-[500px] lg:h-full w-full relative overflow-hidden shadow-2xl">
+                  <Image 
+                    src="/image/konveksi.jpg" 
+                    alt="Produksi Konveksi" 
+                    fill 
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+                {/* Decorative elements */}
+                <div className="absolute -top-4 -right-4 w-32 h-32 bg-amber-300 rounded-full blur-2xl opacity-30"></div>
+                <div className="absolute -bottom-8 -left-8 w-40 h-40 bg-amber-400 rounded-full blur-2xl opacity-20"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ABOUT SECTION - Modern Grid */}
+        <section id="about" className="py-24 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
+              <div className="order-2 lg:order-1">
+                <div className="grid grid-cols-2 gap-6">
+                  <div className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
+                    <div className="text-4xl mb-3">🎯</div>
+                    <h3 className="font-bold text-gray-900 mb-2">Presisi Tinggi</h3>
+                    <p className="text-sm text-gray-600 mt-auto">Setiap jahitan diperiksa dengan standar kualitas ketat</p>
+                  </div>
+                  <div className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
+                    <div className="text-4xl mb-3">⚡</div>
+                    <h3 className="font-bold text-gray-900 mb-2">Cepat & Tepat</h3>
+                    <p className="text-sm text-gray-600 mt-auto">Deadline terpenuhi tanpa mengorbankan kualitas</p>
+                  </div>
+                  <div className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
+                    <div className="text-4xl mb-3">💎</div>
+                    <h3 className="font-bold text-gray-900 mb-2">Material Premium</h3>
+                    <p className="text-sm text-gray-600 mt-auto">Hanya bahan berkualitas dari supplier terpercaya</p>
+                  </div>
+                  <div className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
+                    <div className="text-4xl mb-3">👥</div>
+                    <h3 className="font-bold text-gray-900 mb-2">Tim Profesional</h3>
+                    <p className="text-sm text-gray-600 mt-auto">Penjahit senior dengan pengalaman bertahun-tahun</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="order-1 lg:order-2">
+                <div className="inline-flex items-center gap-2 bg-amber-50 px-4 py-2 rounded-full mb-6">
+                  <span className="w-2 h-2 bg-amber-500 rounded-full"></span>
+                  <span className="text-sm font-medium text-amber-700">Tentang Kami</span>
+                </div>
+                <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                  Mitra Terpercaya untuk
+                  <span className="text-amber-500"> Brand Fashion Anda</span>
+                </h2>
+                <p className="text-lg text-gray-600 mb-6 leading-relaxed">
+                  Kami memahami bahwa setiap brand memiliki DNA desain yang unik. 
+                  Dengan pengalaman lebih dari 15 tahun, kami siap mewujudkan koleksi 
+                  impian Anda dengan standar kualitas tertinggi.
+                </p>
+                <p className="text-gray-600 mb-8 leading-relaxed">
+                  Dari skala kecil hingga produksi massal, kami memberikan solusi 
+                  manufaktur yang fleksibel dan profesional.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* SERVICES SECTION - Card Grid */}
+        <section id="services" className="py-24">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="text-center max-w-2xl mx-auto mb-16">
+              <div className="inline-flex items-center gap-2 bg-amber-50 px-4 py-2 rounded-full mb-6">
+                <span className="w-2 h-2 bg-amber-500 rounded-full"></span>
+                <span className="text-sm font-medium text-amber-700">Layanan Kami</span>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                Solusi Lengkap untuk
+                <span className="text-amber-500"> Koleksi Wanita</span>
+              </h2>
+              <p className="text-xl text-gray-600">
+                Dari dress elegan hingga casual daily, kami siap membantu produksi Anda
+              </p>
             </div>
 
-            <div className="bg-zinc-800/50 border border-zinc-700 p-8 md:p-10 rounded-3xl backdrop-blur-sm">
-              <form className="flex flex-col gap-6">
-                <div className="grid md:grid-cols-2 gap-6">
-                   <div>
-                    <label className="block text-sm font-medium text-zinc-300 mb-2">Nama Lengkap</label>
-                    <input type="text" className="w-full px-4 py-3.5 bg-zinc-900 border border-zinc-700 rounded-xl focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition-colors text-white" placeholder="Cth: Sarah Amelia" />
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[
+                { 
+                  title: "Gamis & Dress", 
+                  desc: "Dress pesta, gamis, abaya dengan pola eksklusif dan jahitan premium yang jatuh sempurna.",
+                  icon: "👗",
+                  color: "from-pink-400 to-rose-400"
+                },
+                { 
+                  title: "Blouse & Kemeja", 
+                  desc: "Atasan formal dan semi-formal dengan finishing rapi pada kerah, manset, dan kancing.",
+                  icon: "👚",
+                  color: "from-blue-400 to-cyan-400"
+                },
+                { 
+                  title: "Rok & Celana", 
+                  desc: "Bawahan wanita bahan woven & knit. Handal untuk plisket, resleting Jepang, dan saku.",
+                  icon: "👖",
+                  color: "from-emerald-400 to-teal-400"
+                },
+                { 
+                  title: "Outer & Jaket", 
+                  desc: "Blazer, cardigan, dan jaket dengan cutting yang tegas dan struktur sempurna.",
+                  icon: "🧥",
+                  color: "from-purple-400 to-indigo-400"
+                },
+                { 
+                  title: "Sportswear", 
+                  desc: "Activewear dan athleisure dengan bahan stretch berkualitas tinggi.",
+                  icon: "🏃‍♀️",
+                  color: "from-orange-400 to-red-400"
+                },
+                { 
+                  title: "Custom Design", 
+                  desc: "Pembuatan sesuai desain khusus Anda, dari sketsa hingga produk jadi.",
+                  icon: "✏️",
+                  color: "from-amber-400 to-yellow-400"
+                }
+              ].map((service, i) => (
+                <div key={i} className="group relative bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100">
+                  <div className={`w-16 h-16 bg-gradient-to-br ${service.color} rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-lg`}>
+                    {service.icon}
                   </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">{service.title}</h3>
+                  <p className="text-gray-600 leading-relaxed">{service.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* PROCESS SECTION - Timeline */}
+        <section id="process" className="py-24 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="text-center max-w-2xl mx-auto mb-16">
+              <div className="inline-flex items-center gap-2 bg-amber-50 px-4 py-2 rounded-full mb-6">
+                <span className="w-2 h-2 bg-amber-500 rounded-full"></span>
+                <span className="text-sm font-medium text-amber-700">Proses Kerja</span>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                Alur Produksi yang
+                <span className="text-amber-500"> Transparan</span>
+              </h2>
+              <p className="text-xl text-gray-600">
+                Kami memastikan setiap tahap berjalan sistematis untuk hasil maksimal
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-4 gap-8">
+              {[
+                { step: "01", title: "Konsultasi", desc: "Diskusi desain, material, dan timeline produksi", icon: "💬" },
+                { step: "02", title: "Sampling", desc: "Pembuatan sampel akurat sesuai keinginan", icon: "🔍" },
+                { step: "03", title: "Produksi", desc: "Produksi massal dengan quality control ketat", icon: "🏭" },
+                { step: "04", title: "Pengiriman", desc: "Packing rapi dan pengiriman tepat waktu", icon: "📦" }
+              ].map((item, i) => (
+                <div key={i} className="relative">
+                  {i < 3 && (
+                    <div className="hidden md:block absolute top-1/4 left-full w-full h-0.5 bg-gray-200 -translate-y-1/2 z-0">
+                      <div className="absolute right-0 top-1/2 w-2 h-2 bg-amber-500 rounded-full"></div>
+                    </div>
+                  )}
+                  <div className="relative z-10 bg-white rounded-2xl p-6 text-center shadow-sm hover:shadow-md transition-shadow">
+                    <div className="w-20 h-20 bg-gradient-to-br from-amber-400 to-amber-500 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4 shadow-lg">
+                      {item.icon}
+                    </div>
+                    <div className="text-amber-500 font-bold text-sm mb-2">Step {item.step}</div>
+                    <h3 className="font-bold text-gray-900 mb-2">{item.title}</h3>
+                    <p className="text-sm text-gray-600">{item.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* PORTFOLIO SECTION */}
+        <section id="portfolio" className="py-24">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="text-center max-w-2xl mx-auto mb-16">
+              <div className="inline-flex items-center gap-2 bg-amber-50 px-4 py-2 rounded-full mb-6">
+                <span className="w-2 h-2 bg-amber-500 rounded-full"></span>
+                <span className="text-sm font-medium text-amber-700">Portfolio</span>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                Hasil Produksi
+                <span className="text-amber-500"> Terbaik Kami</span>
+              </h2>
+              <p className="text-xl text-gray-600">
+                Beberapa koleksi yang telah kami produksi untuk klien
+              </p>
+            </div>
+
+            <ProductPortfolio products={topProducts} />
+          </div>
+        </section>
+
+        {/* TESTIMONIALS SECTION */}
+        <section id="testimonials" className="py-24 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="text-center max-w-2xl mx-auto mb-16">
+              <div className="inline-flex items-center gap-2 bg-amber-50 px-4 py-2 rounded-full mb-6">
+                <span className="w-2 h-2 bg-amber-500 rounded-full"></span>
+                <span className="text-sm font-medium text-amber-700">Testimonial</span>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                Apa Kata
+                <span className="text-amber-500"> Klien Kami</span>
+              </h2>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8">
+              {[
+                { name: "Sarah Dewi", brand: "Maison Sarah", text: "Kualitas jahitan sangat rapi dan detail. Timeline produksi tepat janji. Highly recommended!", rating: 5 },
+                { name: "Amira Putri", brand: "Amira Cloth", text: "Tim sangat profesional dalam membantu produksi koleksi pertama brand saya. Hasilnya memuaskan!", rating: 5 },
+                { name: "Rina Wijaya", brand: "Rina's Atelier", text: "Komunikasi baik, pengerjaan cepat, dan hasil akhir di atas ekspektasi. Makasih tim!", rating: 5 }
+              ].map((testimonial, i) => (
+                <div key={i} className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow">
+                  <div className="flex gap-1 mb-4">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <span key={i} className="text-amber-500">★</span>
+                    ))}
+                  </div>
+                  <p className="text-gray-600 mb-6 leading-relaxed">"{testimonial.text}"</p>
                   <div>
-                    <label className="block text-sm font-medium text-zinc-300 mb-2">Nama Brand (Opsional)</label>
-                    <input type="text" className="w-full px-4 py-3.5 bg-zinc-900 border border-zinc-700 rounded-xl focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition-colors text-white" placeholder="Nama brand Anda" />
+                    <p className="font-bold text-gray-900">{testimonial.name}</p>
+                    <p className="text-sm text-gray-500">{testimonial.brand}</p>
                   </div>
                 </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* CONTACT SECTION - CTA */}
+        <section id="contact" className="py-24">
+          <div className="max-w-5xl mx-auto px-6">
+            <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl p-12 md:p-16 text-center relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl"></div>
+              <div className="absolute bottom-0 left-0 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl"></div>
+              
+              <div className="relative z-10">
+                <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                  Siap Memulai Produksi?
+                </h2>
+                <p className="text-gray-300 text-lg mb-8 max-w-lg mx-auto">
+                  Konsultasikan kebutuhan fashion Anda dengan tim ahli kami
+                </p>
                 
-                <div>
-                  <label className="block text-sm font-medium text-zinc-300 mb-2">Pesan & Kebutuhan</label>
-                  <textarea rows={5} className="w-full px-4 py-3.5 bg-zinc-900 border border-zinc-700 rounded-xl focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition-colors text-white resize-none" placeholder="Ceritakan detail produk yang ingin Anda jahit, perkiraan jumlah (qty), atau pertanyaan lainnya..."></textarea>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <a href="https://wa.me/6281234567890?text=Halo%20RatuJahit,%20saya%20ingin%20berkonsultasi%20mengenai%20produksi." target="_blank" rel="noopener noreferrer" className="px-8 py-4 bg-amber-500 text-white rounded-full font-semibold hover:bg-amber-600 transition-all hover:shadow-lg inline-flex items-center justify-center">
+                    Hubungi Kami Sekarang
+                  </a>
+                  <button className="px-8 py-4 border-2 border-gray-600 text-gray-300 rounded-full font-semibold hover:border-amber-500 hover:text-amber-500 transition-all">
+                    +62 812-3456-7890
+                  </button>
                 </div>
                 
-                <button type="button" className="w-full py-4 mt-2 bg-rose-600 text-white rounded-xl font-bold text-lg hover:bg-rose-500 transition-colors flex items-center justify-center gap-2">
-                  Kirim Pesan Sekarang
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-                </button>
-              </form>
+                <p className="text-gray-400 text-sm mt-8">
+                  Response cepat dalam 2x24 jam
+                </p>
+              </div>
             </div>
           </div>
         </section>
       </main>
-
-      <footer className="bg-black py-10 border-t border-zinc-900 text-center text-zinc-500 text-sm">
-        <p>&copy; {new Date().getFullYear()} FemmeSew. Hak Cipta Dilindungi.</p>
-        <p className="mt-2 text-zinc-600">Tumbuh bersama brand fashion lokal Indonesia.</p>
-      </footer>
-    </div>
+    </>
   );
 }
